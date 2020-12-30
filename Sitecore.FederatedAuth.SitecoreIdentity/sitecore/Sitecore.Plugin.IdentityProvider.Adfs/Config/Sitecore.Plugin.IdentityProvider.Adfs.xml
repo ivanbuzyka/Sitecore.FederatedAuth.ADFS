@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Settings>
+  <Sitecore>
+    <ExternalIdentityProviders>
+      <IdentityProviders>
+      <ADFS type="Sitecore.Plugin.IdentityProviders.IdentityProvider, Sitecore.Plugin.IdentityProviders">
+          <AuthenticationScheme>adfs</AuthenticationScheme>
+          <DisplayName>ADFS</DisplayName>
+          <Enabled>true</Enabled>
+          <ClientId>clientidhere</ClientId>
+          <Authority>https://federation.somedomain.com/adfs</Authority>
+          <MetaAddress>https://federation.somedomain.com/adfs/.well-known/openid-configuration</MetaAddress>
+          <ClaimsTransformations>
+            <!--Place transformation rules here. -->
+            <ClaimsTransformation1 type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <Claim1 type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="name" />
+              </NewClaims>
+            </ClaimsTransformation1 >
+            <ClaimsTransformation2 type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <Claim1 type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="email" />
+              </NewClaims>
+            </ClaimsTransformation2>
+            <ClaimsTransformation3 type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <Claim1 type="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="email" />
+              </NewClaims>
+            </ClaimsTransformation3>
+            <AdUserToAdminUser type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <!--Mapping "SitecoreAdmins" Azure AD group to admins in Sitecore-->
+                <Claim1 type="http://schemas.xmlsoap.org/claims/Group" value="SAMPLE-ADFS-ADMIN-GROUP" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="http://www.sitecore.net/identity/claims/isAdmin" value="true"/>
+              </NewClaims>
+            </AdUserToAdminUser>
+            <!--Example of the concrete AD Group to Sitecore Role Transformation-->
+            <!--<AuthorRoleTransformation type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <Claim1 type="http://schemas.xmlsoap.org/claims/Group" value="SitecoreAuthor" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="role" value="Sitecore\Author"/>
+              </NewClaims>
+            </AuthorRoleTransformation>-->
+            <!--mapping all group claims to the roles with corresponding names-->
+            <AllGroupsToRolesTransformation type="Sitecore.Plugin.IdentityProviders.DefaultClaimsTransformation, Sitecore.Plugin.IdentityProviders">
+              <SourceClaims>
+                <Claim1 type="http://schemas.xmlsoap.org/claims/Group" />
+              </SourceClaims>
+              <NewClaims>
+                <Claim1 type="role" />
+              </NewClaims>
+            </AllGroupsToRolesTransformation>
+          </ClaimsTransformations>
+        </ADFS>
+      </IdentityProviders>
+    </ExternalIdentityProviders>
+  </Sitecore>
+</Settings>
